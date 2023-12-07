@@ -18,11 +18,6 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             RoleSeeder::class,
             UserSeeder::class,
-            AttributeSeeder::class,
-            ValueSeeder::class,
-            ProductSeeder::class,
-            DeliveryMethodSeeder::class,
-            PaymentTypeSeeder::class,
         ]);
     }
 }
