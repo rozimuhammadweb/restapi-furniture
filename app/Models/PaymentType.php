@@ -6,16 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
 
-class Value extends Model
+class PaymentType extends Model
 {
     use HasFactory, HasTranslations;
 
     protected $fillable = ['name'];
 
-    public $translatable = ['name'];
+    public $translatable =['name'];
 
-    public function attribute()
+    public function orders()
     {
-        return $this->belongsTo(Attribute::class);
+        return $this->hasMany(Order::class);
     }
 }
