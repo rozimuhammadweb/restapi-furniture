@@ -13,9 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('values', function (Blueprint $table) {
+        Schema::create('delivery_methods', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('attribute_id')->constrained()->cascadeOnDelete();
+            $table->string('name');
+            $table->text('estimated_time');
+            $table->unsignedBigInteger('price');
             $table->timestamps();
         });
     }
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('values');
+        Schema::dropIfExists('delivery_methods');
     }
 };
