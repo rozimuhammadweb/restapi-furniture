@@ -15,7 +15,8 @@ class DeliveryMethodController extends Controller
      */
     public function index()
     {
-        //
+        return DeliveryMethod::all();
+
     }
 
     /**
@@ -31,7 +32,7 @@ class DeliveryMethodController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreDeliveryMethodRequest  $request
+     * @param \App\Http\Requests\StoreDeliveryMethodRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreDeliveryMethodRequest $request)
@@ -42,7 +43,7 @@ class DeliveryMethodController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\DeliveryMethod  $deliveryMethod
+     * @param \App\Models\DeliveryMethod $deliveryMethod
      * @return \Illuminate\Http\Response
      */
     public function show(DeliveryMethod $deliveryMethod)
@@ -53,7 +54,7 @@ class DeliveryMethodController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\DeliveryMethod  $deliveryMethod
+     * @param \App\Models\DeliveryMethod $deliveryMethod
      * @return \Illuminate\Http\Response
      */
     public function edit(DeliveryMethod $deliveryMethod)
@@ -64,8 +65,8 @@ class DeliveryMethodController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateDeliveryMethodRequest  $request
-     * @param  \App\Models\DeliveryMethod  $deliveryMethod
+     * @param \App\Http\Requests\UpdateDeliveryMethodRequest $request
+     * @param \App\Models\DeliveryMethod $deliveryMethod
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateDeliveryMethodRequest $request, DeliveryMethod $deliveryMethod)
@@ -76,7 +77,7 @@ class DeliveryMethodController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\DeliveryMethod  $deliveryMethod
+     * @param \App\Models\DeliveryMethod $deliveryMethod
      * @return \Illuminate\Http\Response
      */
     public function destroy(DeliveryMethod $deliveryMethod)

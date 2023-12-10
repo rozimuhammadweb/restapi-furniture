@@ -16,7 +16,13 @@ class StoreOrderRequest extends FormRequest
     public function rules()
     {
         return [
-
+            'delivery_method_id' => 'required|numeric',
+            'payment_type_id' => 'required|numeric',
+            'products' => 'required|array:product_id,stock_id,',
+            'products.*.product_id' => 'required|numeric',
+            'products.*.quantity' => 'required|numeric',
+            'products.*.stock_id' => 'nullable|numeric',
+            'comments' => 'nullable|max:250'
         ];
     }
 }

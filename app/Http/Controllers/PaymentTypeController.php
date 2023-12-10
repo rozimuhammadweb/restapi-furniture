@@ -11,11 +11,11 @@ class PaymentTypeController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        //
+        return response()->json(PaymentType::all());
     }
 
     /**
@@ -31,7 +31,7 @@ class PaymentTypeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StorePaymentTypeRequest  $request
+     * @param \App\Http\Requests\StorePaymentTypeRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(StorePaymentTypeRequest $request)
@@ -42,7 +42,7 @@ class PaymentTypeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\PaymentType  $paymentType
+     * @param \App\Models\PaymentType $paymentType
      * @return \Illuminate\Http\Response
      */
     public function show(PaymentType $paymentType)
@@ -53,7 +53,7 @@ class PaymentTypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\PaymentType  $paymentType
+     * @param \App\Models\PaymentType $paymentType
      * @return \Illuminate\Http\Response
      */
     public function edit(PaymentType $paymentType)
@@ -64,8 +64,8 @@ class PaymentTypeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdatePaymentTypeRequest  $request
-     * @param  \App\Models\PaymentType  $paymentType
+     * @param \App\Http\Requests\UpdatePaymentTypeRequest $request
+     * @param \App\Models\PaymentType $paymentType
      * @return \Illuminate\Http\Response
      */
     public function update(UpdatePaymentTypeRequest $request, PaymentType $paymentType)
@@ -76,7 +76,7 @@ class PaymentTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\PaymentType  $paymentType
+     * @param \App\Models\PaymentType $paymentType
      * @return \Illuminate\Http\Response
      */
     public function destroy(PaymentType $paymentType)
