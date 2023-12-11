@@ -28,12 +28,13 @@ class OrderController extends Controller
         $sum = 110;
         $products = Product::query()->limit(2)->get();
         $address = UserAddress::find($request->address_id);
+
         auth()->user()->orders()->create([
             'comment' => $request->comment,
             'delivery_method_id' => $request->delivery_method_id,
-            'payment_type_id' => $request->delivery_method_id,
-            'address' => $address,
+            'payment_type_id' => $request->payment_type_id,
             'sum' => $sum,
+            'address' => $address,
             'products' => $products
 
         ]);
