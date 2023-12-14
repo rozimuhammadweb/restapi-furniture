@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ProductResource;
 use App\Models\Order;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Product;
+use App\Models\Stock;
 use App\Models\UserAddress;
 
 class OrderController extends Controller
@@ -25,21 +27,53 @@ class OrderController extends Controller
 
     public function store(StoreOrderRequest $request)
     {
-        $sum = 110;
-        $products = Product::query()->limit(2)->get();
+        $price = 0;
+        $products = [];
+        $notFound = [];
         $address = UserAddress::find($request->address_id);
 
-        auth()->user()->orders()->create([
-            'comment' => $request->comment,
-            'delivery_method_id' => $request->delivery_method_id,
-            'payment_type_id' => $request->payment_type_id,
-            'sum' => $sum,
-            'address' => $address,
-            'products' => $products
+        foreach ($request['products'] as $requestProduct) {
+            $prod = Product::with('stocks')->findOrFail($requestProduct['product_id']);
+            $productResource['quantity'] = $requestProduct['quantity'];
 
-        ]);
+            if ($prod->stocks()->find($requestProduct['stock_id']) && $prod->stocks()->find($requestProduct['stock_id'])->quantity >= $requestProduct['quantity']) {
+                $productWithStock = $prod->withStock([$requestProduct['stock_id']]);
+                $productResource = new ProductResource($productWithStock);
+                $price += $productResource['price'];
+                $products[] = $productResource->resolve();
+            } else {
+                $notFound[] = $requestProduct;
+            }
+        }
 
-        return 'success';
+        if ($notFound == [] && $products != [] ) {
+
+//        TODO add order status
+            $order = auth()->user()->orders()->create([
+                'comment' => $request->comment,
+                'delivery_method_id' => $request->delivery_method_id,
+                'payment_type_id' => $request->payment_type_id,
+                'sum' => $price,
+                'address' => $address,
+                'products' => $products
+            ]);
+
+            if (isset($order)) {
+                foreach ($products as $product) {
+                    $stock = Stock::find($product['inventory'][0]['id']);
+                    $stock->quantity -= $product['order_quantity'];
+                    $stock->save();
+                }
+            }
+            return 'success';
+        } else{
+            return response([
+               'success' => false,
+               'message' => 'some products not found',
+                'products' => $notFound ,
+            ]);
+        }
+//        return 'something went wrong!!! ';
     }
 
 

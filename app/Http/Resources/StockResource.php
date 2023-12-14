@@ -8,24 +8,23 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class StockResource extends JsonResource
 {
-
     public function toArray($request)
     {
-        $result = [
+        return [
             'stock_id' => $this->id,
-            'quantity' => $this->quantity,
+            'quantity' => $this->when(isset($this->quantity), $this->quantity),
+            'attributes' => $this->getAttributes(),
         ];
-
-        return $this->getAttributes($result);
     }
 
 
-    public function getAttributes($result)
+    public function getAttributes()
     {
         $attributes = json_decode($this->attributes);
 
+        $result = [];
+
         foreach ($attributes as $stockAttribute) {
-            /* Todo Cashe it*/
             $attribute = Attribute::find($stockAttribute->attribute_id);
             $value = Value::find($stockAttribute->value_id);
 
@@ -36,6 +35,5 @@ class StockResource extends JsonResource
 
         return $result;
     }
-
 
 }

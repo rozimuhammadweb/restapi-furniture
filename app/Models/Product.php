@@ -9,7 +9,7 @@ use Spatie\Translatable\HasTranslations;
 
 class Product extends Model
 {
-    use HasFactory, HasTranslations,SoftDeletes;
+    use HasFactory, HasTranslations, SoftDeletes;
 
     protected $fillable = [
         'category_id',
@@ -23,6 +23,12 @@ class Product extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function withStock($stockId)
+    {
+        $this->stocks = [$this->stocks()->findOrFail($stockId)];
+        return $this;
     }
 
     public function stocks()
