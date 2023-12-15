@@ -27,7 +27,7 @@ class OrderController extends Controller
 
     public function store(StoreOrderRequest $request)
     {
-        $price = 0;
+        $sum = 0;
         $products = [];
         $notFound = [];
         $address = UserAddress::find($request->address_id);
@@ -39,21 +39,23 @@ class OrderController extends Controller
             if ($prod->stocks()->find($requestProduct['stock_id']) && $prod->stocks()->find($requestProduct['stock_id'])->quantity >= $requestProduct['quantity']) {
                 $productWithStock = $prod->withStock([$requestProduct['stock_id']]);
                 $productResource = new ProductResource($productWithStock);
-                $price += $productResource['price'];
+                $sum += $productResource['price'];
                 $products[] = $productResource->resolve();
             } else {
+                $requestProduct['we_have'] = $prod->stocks()->find($requestProduct['stock_id'])->quantity;
                 $notFound[] = $requestProduct;
             }
         }
 
-        if ($notFound == [] && $products != [] ) {
-
-//        TODO add order status
+        if ($notFound == [] && $products != []) {
+            //        TODO add order status
+            // dd(in_array($request['payment_type_id'], [1, 2]) ? 1 : 10);
             $order = auth()->user()->orders()->create([
                 'comment' => $request->comment,
                 'delivery_method_id' => $request->delivery_method_id,
                 'payment_type_id' => $request->payment_type_id,
-                'sum' => $price,
+                'status_id' => in_array($request['payment_type_id'], [1,2]) ? 1 : 10,
+                'sum' => $sum,
                 'address' => $address,
                 'products' => $products
             ]);
@@ -66,11 +68,11 @@ class OrderController extends Controller
                 }
             }
             return 'success';
-        } else{
+        } else {
             return response([
-               'success' => false,
-               'message' => 'some products not found',
-                'products' => $notFound ,
+                'success' => false,
+                'message' => 'some products not found',
+                'products' => $notFound,
             ]);
         }
 //        return 'something went wrong!!! ';

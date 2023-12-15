@@ -5,17 +5,22 @@ namespace App\Http\Controllers;
 use App\Models\Status;
 use App\Http\Requests\StoreStatusRequest;
 use App\Http\Requests\UpdateStatusRequest;
+use GuzzleHttp\Psr7\Request;
 
 class StatusController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum');
+    }
+
     public function index()
     {
-        //
+        // if ($request->has('for')) {
+        //     return Status::where('for', $request['for'])->get();
+        // }
+
+        return Status::all();
     }
 
     /**
