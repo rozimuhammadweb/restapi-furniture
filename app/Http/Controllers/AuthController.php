@@ -7,6 +7,11 @@ use http\Env\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Http\Requests\LoginRequest;
+use App\Http\Resources\UserResource;
+use GuzzleHttp\Psr7\Request as Psr7Request;
+use Illuminate\Http\Client\Request as ClientRequest;
+use Illuminate\Http\Request as HttpRequest;
+use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
 
 class AuthController extends Controller
 {
@@ -40,9 +45,9 @@ class AuthController extends Controller
     }
 
 
-    public function user(Request $request)
+    public function user(HttpRequest $request)
     {
-        return $request->user();
+        return new UserResource($request->user());
     }
 
 

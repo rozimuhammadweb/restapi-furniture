@@ -21,7 +21,12 @@ class OrderController extends Controller
 
     public function index()
     {
-        return auth()->user()->orders;
+
+        if (request()->has('status_id')) {
+            return response(OrderResource::collection(auth()->user()->orders()->where('status_id', request('status_id'))->paginate()));
+        }
+
+        return response(OrderResource::collection(auth()->user()->orders()->paginate()));
     }
 
 
@@ -42,8 +47,13 @@ class OrderController extends Controller
                 $sum += $productResource['price'];
                 $products[] = $productResource->resolve();
             } else {
-                $requestProduct['we_have'] = $prod->stocks()->find($requestProduct['stock_id'])->quantity;
-                $notFound[] = $requestProduct;
+                if (isset($requestProduct['quantity'])) {
+                    $productResource['quantity'] = $requestProduct['quantity'];
+                } else {
+                    // $requestProduct['we_have'] = $prod->stocks()->find($requestProduct['stock_id'])->quantity;
+                    continue;
+                    // $notFound[] = $requestProduct;
+                }
             }
         }
 
@@ -54,7 +64,7 @@ class OrderController extends Controller
                 'comment' => $request->comment,
                 'delivery_method_id' => $request->delivery_method_id,
                 'payment_type_id' => $request->payment_type_id,
-                'status_id' => in_array($request['payment_type_id'], [1,2]) ? 1 : 10,
+                'status_id' => in_array($request['payment_type_id'], [1, 2]) ? 1 : 10,
                 'sum' => $sum,
                 'address' => $address,
                 'products' => $products
@@ -67,21 +77,19 @@ class OrderController extends Controller
                     $stock->save();
                 }
             }
-            return 'success';
+            return $this->success('order created', $order);
         } else {
-            return response([
-                'success' => false,
-                'message' => 'some products not found',
-                'products' => $notFound,
-            ]);
+            return $this->error(
+                'some products not found',
+                ['not_found_products' => $notFound],
+            );
         }
-//        return 'something went wrong!!! ';
     }
 
 
     public function show(Order $order)
     {
-        return new OrderResource($order);
+        return $this->response(new OrderResource($order));
     }
 
 

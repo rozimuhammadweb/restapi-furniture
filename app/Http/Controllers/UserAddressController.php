@@ -15,7 +15,7 @@ class UserAddressController extends Controller
 
     public function index()
     {
-        return auth()->user()->addresses;
+        return $this->response(auth()->user()->addresses);
     }
 
 
