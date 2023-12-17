@@ -6,16 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
 
-class Value extends Model
+class Setting extends Model
 {
     use HasFactory, HasTranslations;
 
-    protected $fillable = ['name'];
+    protected $guarded = [];
 
     public $translatable = ['name'];
 
-    public function valueable()
+    public function values()
     {
-        return $this->morphTo();
+        return $this->morphToMany(Value::class, 'valueable');
     }
 }

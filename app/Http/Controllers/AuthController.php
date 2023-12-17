@@ -28,27 +28,25 @@ class AuthController extends Controller
             ]);
         }
 
-        return response()->json([
-            'token' => $user->createToken($request->email)->plainTextToken
-        ]);
+
+        return $this->success('', ['token' => $user->createToken($request->email)->plainTextToken]);
     }
 
     public function register()
     {
-
     }
 
+    public function changePassword()
+    {
+    }
 
     public function logout()
     {
-
     }
 
 
     public function user(HttpRequest $request)
     {
-        return new UserResource($request->user());
+        return $this->response(new UserResource($request->user()));
     }
-
-
 }

@@ -14,6 +14,6 @@ class Attribute extends Model
 
     public function values()
     {
-        return $this->hasMany(Value::class);
+        return $this->morphToMany(Value::class, 'valueable');
     }
 }

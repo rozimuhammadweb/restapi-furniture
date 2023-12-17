@@ -21,9 +21,8 @@ class UserAddressController extends Controller
 
     public function store(StoreUserAddressRequest $request)
     {
-        auth()->user()->addresses()->create($request);
-        return true;
-
+        $address = auth()->user()->addresses()->create($request->toArray());
+        return $this->success('shipping address created', $address);
     }
 
 
